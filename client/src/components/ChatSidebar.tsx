@@ -128,10 +128,10 @@ export default function ChatSidebar() {
                   ? 'bg-cyan-600 text-white shadow-xl shadow-cyan-900/30 font-medium' 
                   : 'bg-slate-900 border border-slate-800 text-slate-300 shadow-lg'
               }`}>
-                {/* Handle parts-based message content if present */}
-                {m.parts?.map((part: any, i: number) => (
+                {/* Handle parts-based message content */}
+                {m.parts.map((part, i) => (
                   part.type === 'text' ? <span key={i}>{part.text}</span> : null
-                )) || m.content}
+                ))}
                 {m.role === 'assistant' && (
                   <Sparkles className="absolute -top-2 -right-2 w-4 h-4 text-cyan-400 opacity-20" />
                 )}
