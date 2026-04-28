@@ -19,7 +19,7 @@ export default function ProjectGrid() {
           
           // 2. Teeno chote projects (Inventory, Book, etc.) = 2 columns each (2+2+2=6)
           // Is se teeno ek hi line mein aa jayenge aur khali jagah bhar jayegi
-          const isSmallRow = project.id === 'ai-inventory' || project.id === 'ai-explained-book' || project.category === 'Research';
+          const isSmallRow = project.id === 'ai-inventory' || project.id === 'ai-explained-book' || project.category === ('Research' as any);
 
           return (
             <motion.div

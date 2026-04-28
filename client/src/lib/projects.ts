@@ -6,7 +6,7 @@ export interface Project {
   videoUrl: string;
   githubUrl: string;
   
-  category: 'Core Engineering' | 'Automation' | 'Authoring' | 'UI/UX' | 'Full-Stack AI';
+  category: 'Core Engineering' | 'Automation' | 'Authoring' | 'UI/UX' | 'Full-Stack AI'|'Research';
 }
 
 export const projects: Project[] = [
