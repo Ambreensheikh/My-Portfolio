@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useChat } from '@ai-sdk/react';
+import { useChat, type UIMessage } from '@ai-sdk/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, MessageSquare, Sparkles, Command } from 'lucide-react';
 import { projects } from '../lib/projects';
@@ -14,11 +14,9 @@ export default function ChatSidebar() {
     messages, 
     status, 
     sendMessage 
-  } = useChat({
-    api: '/api/chat',
-  }) as any;
+  } = useChat();
 
-  const isLoading = status !== 'ready';
+  const isLoading = status === 'submitted' || status === 'streaming';
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -96,29 +94,29 @@ export default function ChatSidebar() {
             
             <div className="grid grid-cols-1 gap-3 w-full max-w-[300px]">
               {suggestions.map((s) => (
-               <button
-  key={s}
-  onClick={async () => {
-    if (isLoading) return;
-    try {
-      await sendMessage({
-        text: s,
-      });
-    } catch (error) {
-      console.error("Chat Error:", error);
-    }
-  }}
-  className="px-4 py-2 text-xs text-slate-400 border border-slate-800 rounded-xl hover:bg-slate-900 hover:text-cyan-400 hover:border-cyan-500/30 transition-all text-left"
->
-  {s}
-</button>
+                <button
+                  key={s}
+                  onClick={async () => {
+                    if (isLoading) return;
+                    try {
+                      await sendMessage({
+                        text: s,
+                      });
+                    } catch (error) {
+                      console.error("Chat Error:", error);
+                    }
+                  }}
+                  className="px-4 py-2 text-xs text-slate-400 border border-slate-800 rounded-xl hover:bg-slate-900 hover:text-cyan-400 hover:border-cyan-500/30 transition-all text-left"
+                >
+                  {s}
+                </button>
               ))}
             </div>
           </motion.div>
         )}
 
         <AnimatePresence>
-          {messages.map((m: any) => (
+          {messages.map((m: UIMessage) => (
             <motion.div 
               key={m.id} 
               initial={{ opacity: 0, y: 10, scale: 0.98 }}
@@ -130,7 +128,7 @@ export default function ChatSidebar() {
                   ? 'bg-cyan-600 text-white shadow-xl shadow-cyan-900/30 font-medium' 
                   : 'bg-slate-900 border border-slate-800 text-slate-300 shadow-lg'
               }`}>
-                {/* Handle parts-based message content in v6 */}
+                {/* Handle parts-based message content if present */}
                 {m.parts?.map((part: any, i: number) => (
                   part.type === 'text' ? <span key={i}>{part.text}</span> : null
                 )) || m.content}
